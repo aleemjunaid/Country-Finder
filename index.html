@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Country Finder</title>
+  <link rel="stylesheet" href="./index.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+  <div class="noteinp rounded-3xl p-20 bg-white">
+    <input type="text" class="inp rounded-3xl p-2 w-96 text-blue-900" placeholder="Enter Country Name">
+    <button class="p-2 w-24 bg-blue-800 rounded-3xl text-white ml-3 pl-3">Submit</button>
+    <div id="search-result" class="flex flex-col justify-between h-80 mt-4">
+      <img class="w-[160px] mt-4" src="" id="flag">
+      <h2 class="font-bold text-2xl mt-4">Country: <span id="name"></span></h2>
+      <h4 class="font-semibold text-1xl mt-4">Capital: <span id="capital"></span></h4>
+      <h4 class="font-semibold text-1xl mt-4">Continent: <span id="continent"></span></h4>
+      <h4 class="font-semibold text-1xl mt-4">Population: <span id="population"></span></h4>
+      <h4 class="font-semibold text-1xl mt-4">Currency: <span id="currency"></span> - <span id="currency-short"></span></h4>
+      <h4 class="font-semibold text-1xl mt-4">Common Language: <span id="language"></span></h4>
+    </div>
+  </div>
+
+
+
+
+  <script>
+
+    let inp = document.querySelector('input')
+    let btn=document.querySelector('button')
+    let search_result=document.getElementById('search-result')
+    let flag=document.getElementById('flag')
+    let name=document.getElementById('name')
+    let capital=document.getElementById('capital')
+    let continent=document.getElementById('continent')
+    let population=document.getElementById('population')
+    let currency=document.getElementById('currency')
+    let currencyshort=document.getElementById('currency-short')
+    let language=document.getElementById('language')
+    // console.log(inp,btn,search_result,flag,name,capital,continent,population,currency,currencyshort,language);
+
+    function mydata(data){  
+      if(inp.value == "")
+      {
+      search_result.style.display='none'
+      }
+      else{
+        search_result.style.display='flex'
+      }
+      countrydata = data[0]
+      console.log(countrydata);
+      flag.src =countrydata.flags.svg
+      name.innerHTML = countrydata.name.common
+      capital.innerHTML = countrydata.capital
+      continent.innerHTML = countrydata.continents
+      population.innerHTML = countrydata.population
+      currency.innerHTML = countrydata.currencies[Object.keys(countrydata.currencies)].name
+      currencyshort.innerHTML = Object.keys(countrydata.currencies)[0]
+      language.innerHTML = Object.values(countrydata.languages)
+    }
+
+    btn.addEventListener('click',()=>{
+      let countryname = inp.value
+      fetch(`https://restcountries.com/v3.1/name/${countryname}`)
+      .then(res=>res.json())
+      .then(data=>mydata(data))
+    })
+
+
+  </script>
+</body>
+
+</html>
